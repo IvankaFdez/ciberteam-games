@@ -1,1 +1,506 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>CyberClick – Defiende tu Red</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    /* Estilo general - tema morado ciber */
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #3a1c71, #000000 65%);
+      color: #f5f5ff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+
+    .game-container {
+      width: 100%;
+      max-width: 900px;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+
+    .card {
+      background: rgba(10, 10, 26, 0.92);
+      border-radius: 18px;
+      border: 1px solid rgba(170, 120, 255, 0.4);
+      box-shadow: 0 0 25px rgba(150, 80, 255, 0.4);
+      padding: 18px;
+      box-sizing: border-box;
+      backdrop-filter: blur(8px);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 1.8rem;
+      text-align: center;
+      color: #f3e8ff;
+    }
+
+    .subtitle {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #cbb5ff;
+      margin-bottom: 18px;
+    }
+
+    .top-bar {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 18px;
+      align-items: center;
+    }
+
+    .points-display {
+      font-size: 1.1rem;
+      font-weight: 600;
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(80, 35, 150, 0.75);
+      border: 1px solid rgba(220, 190, 255, 0.7);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .points-label {
+      opacity: 0.9;
+    }
+
+    .pps-display {
+      font-size: 0.9rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(30, 20, 60, 0.9);
+      border: 1px solid rgba(160, 110, 255, 0.5);
+      color: #ddccff;
+    }
+
+    .main-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.5fr);
+      gap: 16px;
+    }
+
+    @media (max-width: 700px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Botón clicker principal */
+    .click-area {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 12px;
+    }
+
+    .click-button {
+      width: 220px;
+      height: 220px;
+      border-radius: 50%;
+      border: 2px solid #f5e1ff;
+      background: radial-gradient(circle at top, #b26dff, #5a1bb8 60%, #2c074b);
+      box-shadow:
+        0 0 25px rgba(205, 120, 255, 0.9),
+        0 0 70px rgba(140, 60, 255, 0.8);
+      color: #fff;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      transition: transform 0.08s ease, box-shadow 0.08s ease, filter 0.08s ease;
+    }
+
+    .click-button span.icon {
+      font-size: 2.5rem;
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.9));
+    }
+
+    .click-button:active {
+      transform: scale(0.94);
+      box-shadow:
+        0 0 8px rgba(205, 120, 255, 0.7),
+        0 0 24px rgba(140, 60, 255, 0.8);
+      filter: brightness(0.95);
+    }
+
+    /* Log de eventos */
+    .log-panel {
+      margin-top: 12px;
+      padding: 10px;
+      border-radius: 12px;
+      background: rgba(25, 15, 50, 0.9);
+      border: 1px solid rgba(150, 100, 255, 0.4);
+      font-size: 0.8rem;
+      max-height: 130px;
+      overflow-y: auto;
+      color: #e8ddff;
+    }
+
+    .log-entry {
+      margin-bottom: 4px;
+      opacity: 0.9;
+    }
+
+    /* Columna tienda */
+    .shop-panel {
+      padding: 10px;
+      border-radius: 16px;
+      background: rgba(12, 8, 32, 0.95);
+      border: 1px solid rgba(160, 110, 255, 0.6);
+    }
+
+    .shop-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      color: #f0e4ff;
+      text-align: center;
+    }
+
+    .upgrade-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .upgrade {
+      border-radius: 12px;
+      padding: 8px 10px;
+      background: linear-gradient(120deg, rgba(80, 40, 150, 0.9), rgba(40, 15, 90, 0.95));
+      border: 1px solid rgba(220, 190, 255, 0.5);
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: transform 0.08s, box-shadow 0.08s, filter 0.08s;
+    }
+
+    .upgrade.disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      filter: grayscale(0.4);
+      border-style: dashed;
+    }
+
+    .upgrade:hover:not(.disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 0 12px rgba(200, 160, 255, 0.7);
+    }
+
+    .upgrade-icon {
+      font-size: 1.4rem;
+    }
+
+    .upgrade-main {
+      flex: 1;
+    }
+
+    .upgrade-title {
+      font-size: 0.94rem;
+      font-weight: 600;
+    }
+
+    .upgrade-desc {
+      font-size: 0.78rem;
+      color: #e0d3ff;
+      opacity: 0.9;
+    }
+
+    .upgrade-meta {
+      text-align: right;
+      font-size: 0.78rem;
+      min-width: 80px;
+    }
+
+    .upgrade-meta .cost {
+      color: #ffd6ff;
+      font-weight: 600;
+    }
+
+    .upgrade-meta .level {
+      color: #c5b3ff;
+    }
+
+    .footer-note {
+      margin-top: 10px;
+      font-size: 0.75rem;
+      text-align: center;
+      color: #a796d9;
+      opacity: 0.85;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <div class="card">
+      <h1>CyberClick – Defiende tu Red</h1>
+      <div class="subtitle">
+        Haz clic en el escudo para detectar amenazas, compra mejoras y automatiza tu SOC ⚡🛡️
+      </div>
+
+      <div class="top-bar">
+        <div class="points-display">
+          <span class="points-label">Alertas gestionadas:</span>
+          <span id="points-value">0</span>
+        </div>
+        <div class="pps-display">
+          Producción automática: <span id="pps-value">0</span> pts/seg
+        </div>
+      </div>
+
+      <div class="main-layout">
+        <!-- Zona de click principal -->
+        <div>
+          <div class="click-area">
+            <button id="click-button" class="click-button">
+              <span class="icon">🛡️</span>
+              <span>Detectar amenaza</span>
+              <small>+1 alerta por clic</small>
+            </button>
+          </div>
+          <div class="log-panel" id="log-panel">
+            <div class="log-entry">[Sistema] CyberClick iniciado. SOC en modo manual.</div>
+          </div>
+        </div>
+
+        <!-- Tienda / mejoras -->
+        <div class="shop-panel">
+          <div class="shop-title">Centro de Operaciones de Seguridad (SOC)</div>
+          <div class="upgrade-list">
+            <div class="upgrade disabled" id="upgrade-script">
+              <div class="upgrade-icon">📜</div>
+              <div class="upgrade-main">
+                <div class="upgrade-title">Script Antivirus</div>
+                <div class="upgrade-desc">
+                  Automatiza pequeñas tareas. +1 punto/seg por nivel.
+                </div>
+              </div>
+              <div class="upgrade-meta">
+                <div class="cost">Coste: <span id="cost-script">50</span></div>
+                <div class="level">Nivel: <span id="level-script">0</span></div>
+              </div>
+            </div>
+
+            <div class="upgrade disabled" id="upgrade-firewall">
+              <div class="upgrade-icon">🔥</div>
+              <div class="upgrade-main">
+                <div class="upgrade-title">Firewall Automático</div>
+                <div class="upgrade-desc">
+                  Filtra tráfico malicioso. +5 puntos/seg por nivel.
+                </div>
+              </div>
+              <div class="upgrade-meta">
+                <div class="cost">Coste: <span id="cost-firewall">200</span></div>
+                <div class="level">Nivel: <span id="level-firewall">0</span></div>
+              </div>
+            </div>
+
+            <div class="upgrade disabled" id="upgrade-ia">
+              <div class="upgrade-icon">🤖</div>
+              <div class="upgrade-main">
+                <div class="upgrade-title">IA de Detección</div>
+                <div class="upgrade-desc">
+                  Detección avanzada. +20 puntos/seg por nivel.
+                </div>
+              </div>
+              <div class="upgrade-meta">
+                <div class="cost">Coste: <span id="cost-ia">800</span></div>
+                <div class="level">Nivel: <span id="level-ia">0</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="footer-note">
+            Consejo: empieza subiendo Scripts, luego Firewalls y termina con la IA.  
+            Ideal para un short explicando ciberseguridad 😉
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Botón Ko-fi -->
+  <div style="text-align:center; margin-top:30px; padding-bottom:40px;">
+    <a href="https://ko-fi.com/ciberteam" target="_blank">
+      <img src="https://storage.ko-fi.com/cdn/kofi3.png?v=3" 
+           alt="Invítame a un café en Ko-fi" 
+           style="width:200px; border-radius:10px;">
+    </a>
+  </div>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      // Variables principales del juego
+      let puntos = 0;
+      let scriptLevel = 0;
+      let firewallLevel = 0;
+      let iaLevel = 0;
+
+      // Costes iniciales
+      let scriptCost = 50;
+      let firewallCost = 200;
+      let iaCost = 800;
+
+      // Hitos / logros
+      let milestone50 = false;
+      let milestone200 = false;
+      let milestone800 = false;
+      let milestone5000 = false;
+      let milestone10000 = false;
+
+      // Referencias a elementos del DOM
+      const pointsValueEl = document.getElementById("points-value");
+      const ppsValueEl = document.getElementById("pps-value");
+      const logPanel = document.getElementById("log-panel");
+
+      const clickButton = document.getElementById("click-button");
+
+      const upgradeScript = document.getElementById("upgrade-script");
+      const upgradeFirewall = document.getElementById("upgrade-firewall");
+      const upgradeIa = document.getElementById("upgrade-ia");
+
+      const costScriptEl = document.getElementById("cost-script");
+      const costFirewallEl = document.getElementById("cost-firewall");
+      const costIaEl = document.getElementById("cost-ia");
+
+      const levelScriptEl = document.getElementById("level-script");
+      const levelFirewallEl = document.getElementById("level-firewall");
+      const levelIaEl = document.getElementById("level-ia");
+
+      function actualizarUI() {
+        pointsValueEl.textContent = Math.floor(puntos);
+        costScriptEl.textContent = scriptCost;
+        costFirewallEl.textContent = firewallCost;
+        costIaEl.textContent = iaCost;
+
+        levelScriptEl.textContent = scriptLevel;
+        levelFirewallEl.textContent = firewallLevel;
+        levelIaEl.textContent = iaLevel;
+
+        const pps = scriptLevel * 1 + firewallLevel * 5 + iaLevel * 20;
+        ppsValueEl.textContent = pps;
+
+        // Activar / desactivar mejoras según puntos
+        toggleUpgrade(upgradeScript, puntos >= scriptCost);
+        toggleUpgrade(upgradeFirewall, puntos >= firewallCost);
+        toggleUpgrade(upgradeIa, puntos >= iaCost);
+
+        // Hitos
+        if (!milestone50 && puntos >= 50) {
+          milestone50 = true;
+          addLogEntry("🎯 Hito: 50 alertas gestionadas. Ya puedes invertir en tu primer Script Antivirus.");
+        }
+        if (!milestone200 && puntos >= 200) {
+          milestone200 = true;
+          addLogEntry("🔥 Hito: 200 alertas. El Firewall Automático empieza a ser una buena idea.");
+        }
+        if (!milestone800 && puntos >= 800) {
+          milestone800 = true;
+          addLogEntry("🤖 Hito: 800 alertas. Tu SOC está listo para la IA de detección.");
+        }
+        if (!milestone5000 && puntos >= 5000) {
+          milestone5000 = true;
+          addLogEntry("🚀 Hito: 5.000 alertas. Tu SOC ya parece el de una gran empresa.");
+        }
+        if (!milestone10000 && puntos >= 10000) {
+          milestone10000 = true;
+          addLogEntry("🏆 OBJETIVO COMPLETO: 10.000 alertas gestionadas. SOC totalmente automatizado. ¡Misión cumplida!");
+          alert("🏆 ¡Enhorabuena! Has llegado a 10.000 alertas gestionadas. Has ganado esta partida de CyberClick.");
+        }
+      }
+
+      function toggleUpgrade(element, canAfford) {
+        if (!element) return;
+        if (canAfford) {
+          element.classList.remove("disabled");
+        } else {
+          element.classList.add("disabled");
+        }
+      }
+
+      function addLogEntry(text) {
+        if (!logPanel) return;
+        const entry = document.createElement("div");
+        entry.className = "log-entry";
+        entry.textContent = text;
+        logPanel.appendChild(entry);
+        logPanel.scrollTop = logPanel.scrollHeight;
+      }
+
+      // Evento: click principal
+      if (clickButton) {
+        clickButton.addEventListener("click", () => {
+          puntos += 1;
+          actualizarUI();
+        });
+      }
+
+      // Eventos: comprar mejoras
+      if (upgradeScript) {
+        upgradeScript.addEventListener("click", () => {
+          if (puntos >= scriptCost) {
+            puntos -= scriptCost;
+            scriptLevel += 1;
+            scriptCost = Math.floor(scriptCost * 1.3);
+            addLogEntry("[SOC] Script Antivirus mejorado a nivel " + scriptLevel + ".");
+            actualizarUI();
+          }
+        });
+      }
+
+      if (upgradeFirewall) {
+        upgradeFirewall.addEventListener("click", () => {
+          if (puntos >= firewallCost) {
+            puntos -= firewallCost;
+            firewallLevel += 1;
+            firewallCost = Math.floor(firewallCost * 1.4);
+            addLogEntry("[SOC] Firewall Automático mejorado a nivel " + firewallLevel + ".");
+            actualizarUI();
+          }
+        });
+      }
+
+      if (upgradeIa) {
+        upgradeIa.addEventListener("click", () => {
+          if (puntos >= iaCost) {
+            puntos -= iaCost;
+            iaLevel += 1;
+            iaCost = Math.floor(iaCost * 1.5);
+            addLogEntry("[SOC] IA de Detección mejorada a nivel " + iaLevel + ".");
+            actualizarUI();
+          }
+        });
+      }
+
+      // Producción automática cada segundo
+      setInterval(() => {
+        const pps = scriptLevel * 1 + firewallLevel * 5 + iaLevel * 20;
+        if (pps > 0) {
+          puntos += pps;
+          actualizarUI();
+        }
+      }, 1000);
+
+      // Inicializar UI
+      actualizarUI();
+    });
+  </script>
+</body>
+</html>
 
