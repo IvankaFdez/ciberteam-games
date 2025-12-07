@@ -1,1 +1,186 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>CiberTeam Games – Minijuegos de Ciberseguridad</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #4b1e82, #050015 65%);
+      color: #f5f5ff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .page {
+      width: 100%;
+      max-width: 1000px;
+      padding: 16px;
+      box-sizing: border-box;
+    }
+    .card {
+      background: rgba(10, 10, 30, 0.94);
+      border-radius: 22px;
+      border: 1px solid rgba(190, 140, 255, 0.6);
+      box-shadow: 0 0 30px rgba(160, 90, 255, 0.65);
+      padding: 20px;
+      box-sizing: border-box;
+      backdrop-filter: blur(10px);
+    }
+    h1 {
+      margin: 0 0 8px;
+      text-align: center;
+      font-size: 2rem;
+      color: #f8ecff;
+    }
+    .subtitle {
+      text-align: center;
+      font-size: 0.95rem;
+      color: #d0c0ff;
+      margin-bottom: 18px;
+    }
+    .games-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+    .game-card {
+      background: radial-gradient(circle at top left, rgba(120, 70, 230, 0.6), rgba(12, 8, 35, 0.95));
+      border-radius: 18px;
+      border: 1px solid rgba(215, 185, 255, 0.8);
+      padding: 14px;
+      box-shadow: 0 0 18px rgba(150, 90, 255, 0.7);
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .game-title {
+      font-size: 1.05rem;
+      font-weight: 600;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .game-desc {
+      font-size: 0.85rem;
+      color: #e4d8ff;
+      opacity: 0.9;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 0.75rem;
+      padding: 3px 9px;
+      border-radius: 999px;
+      background: rgba(10, 255, 200, 0.1);
+      border: 1px solid rgba(100, 255, 220, 0.7);
+      color: #b2fff1;
+      margin-top: 2px;
+    }
+    .play-btn {
+      margin-top: 8px;
+      align-self: flex-start;
+      border-radius: 999px;
+      padding: 8px 16px;
+      border: none;
+      background: linear-gradient(135deg, #7e3cff, #c85bff);
+      color: #fff;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 0 12px rgba(190, 120, 255, 0.9);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      text-decoration: none;
+    }
+    .play-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 0 16px rgba(220, 150, 255, 1);
+    }
+    .footer {
+      margin-top: 10px;
+      text-align: center;
+      font-size: 0.8rem;
+      color: #d0c0ff;
+      opacity: 0.9;
+    }
+    @media (max-width: 700px) {
+      .card { padding: 16px; border-radius: 18px; }
+      h1 { font-size: 1.7rem; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <div class="card">
+      <h1>CiberTeam Games</h1>
+      <div class="subtitle">
+        Minijuegos de ciberseguridad para aprender mientras juegas 💜🛡️
+      </div>
+
+      <div class="games-grid">
+        <!-- Juego 1: CyberClick -->
+        <div class="game-card">
+          <div class="game-title">
+            🛡️ CyberClick – Defiende tu Red
+          </div>
+          <div class="game-desc">
+            Haz clic para detectar amenazas, compra mejoras y automatiza tu SOC.
+            Ideal para entender el concepto de alertas, scripts, firewalls e IA de detección.
+          </div>
+          <div class="badge">Clicker · SOC · Alertas</div>
+          <a class="play-btn" href="./cyberclick/" target="_self">
+            Jugar ahora
+          </a>
+        </div>
+
+        <!-- Juego 2: Quiz de Ciberseguridad -->
+        <div class="game-card">
+          <div class="game-title">
+            🧠 Quiz de Ciberseguridad
+          </div>
+          <div class="game-desc">
+            Tres niveles de dificultad: básico, intermedio y avanzado. 
+            Pon a prueba tus conocimientos sobre contraseñas, phishing, redes, OSINT, SOC y más.
+          </div>
+          <div class="badge">Quiz · 3 niveles</div>
+          <a class="play-btn" href="./quiz/" target="_self">
+            Empezar el quiz
+          </a>
+        </div>
+
+        <!-- Juego 3: Juego de la Granja -->
+        <div class="game-card">
+          <div class="game-title">
+            🌾 Juego de la Granja (beta)
+          </div>
+          <div class="game-desc">
+            Próximo minijuego en desarrollo. Una granja digital donde aprenderás conceptos 
+            de ciberseguridad mientras gestionas recursos y proteges tu entorno.
+          </div>
+          <div class="badge">Próximamente</div>
+          <a class="play-btn" href="./granja/" target="_self">
+            Ver versión actual
+          </a>
+        </div>
+      </div>
+
+      <div class="footer">
+        Si te gustan estos juegos, puedes apoyar el proyecto invitándome a un café ☕💜 en Ko-fi:
+        <br />
+        <a href="https://ko-fi.com/ciberteam" target="_blank" style="display:inline-block; margin-top:8px;">
+          <img src="https://storage.ko-fi.com/cdn/kofi3.png?v=3"
+               alt="Apóyame en Ko-fi"
+               style="width:180px; border-radius:10px; border:none;">
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
 
